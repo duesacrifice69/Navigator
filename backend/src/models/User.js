@@ -21,7 +21,7 @@ const User = sequelize.define("User", {
     allowNull: true,
   },
   nicNumber: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
     unique: true,
   },

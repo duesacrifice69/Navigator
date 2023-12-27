@@ -5,7 +5,7 @@ const Attendance = sequelize.define(
   "Attendances",
   {
     employeeNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     Date: {

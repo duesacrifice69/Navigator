@@ -5,7 +5,7 @@ const Leaves = sequelize.define(
   "Leaves",
   {
     employeeNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     Type: {

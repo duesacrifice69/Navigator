@@ -3,7 +3,7 @@ const sequelize = require("../../configuration/db.config");
 
 const Dediction = sequelize.define("Dedication", {
   employeeNumber: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   Date: {
@@ -43,6 +43,5 @@ const Dediction = sequelize.define("Dedication", {
     allowNull: true,
   },
 });
-
 
 module.exports = Dediction;
