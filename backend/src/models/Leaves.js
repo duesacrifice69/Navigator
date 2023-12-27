@@ -5,7 +5,7 @@ const Leaves = sequelize.define(
   "Leaves",
   {
     employeeNumber: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     Type: {
@@ -22,7 +22,7 @@ const Leaves = sequelize.define(
     },
   },
   { timestamps: false }
-  );
-  User.hasMany(Leaves, { foreignKey: "employeeNumber" });
-  Leaves.belongsTo(User, { foreignKey: "employeeNumber" });
-  module.exports=Leaves;
+);
+User.hasMany(Leaves, { foreignKey: "employeeNumber" });
+Leaves.belongsTo(User, { foreignKey: "employeeNumber" });
+module.exports = Leaves;

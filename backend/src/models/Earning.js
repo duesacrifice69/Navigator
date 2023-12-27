@@ -3,7 +3,7 @@ const sequelize = require("../../configuration/db.config");
 
 const Earning = sequelize.define("Earning", {
   employeeNumber: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   Date: {

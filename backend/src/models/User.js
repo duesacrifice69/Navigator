@@ -1,13 +1,13 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../../configuration/db.config'); 
+const { DataTypes } = require("sequelize");
+const sequelize = require("../../configuration/db.config");
 
-const User = sequelize.define('User', {
+const User = sequelize.define("User", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
   employeeNumber: {
-    type: DataTypes.STRING, 
+    type: DataTypes.STRING,
     allowNull: false,
     unique: true,
   },
@@ -16,9 +16,9 @@ const User = sequelize.define('User', {
     allowNull: false,
     unique: true,
   },
-  mobile:{
-    type:DataTypes.INET,
-    allowNull:true,
+  mobile: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
   },
   nicNumber: {
     type: DataTypes.INTEGER,
@@ -41,14 +41,14 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  verificationCode:{
+  verificationCode: {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
-  verificationCodeExpiration:{
+  verificationCodeExpiration: {
     type: DataTypes.DATE,
     allowNull: true,
-  }
+  },
 });
 
 module.exports = User;
