@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { User } from "../../assets";
 import { ImageEditor } from "../";
 import API from "../../api";
@@ -98,11 +98,11 @@ const RegForm = ({ onBackClick }) => {
       return;
     }
     console.log(profilePicture);
-    const userImage = new File([profilePicture], profilePictureBin.name, {
+    const userImage = new File([profilePicture], profilePictureBin?.name, {
       type: "image/png",
     });
     console.log(URL.createObjectURL(userImage));
-    
+
     const register = new FormData();
     register.append("name", formData.name);
     register.append("email", formData.email);
@@ -110,7 +110,9 @@ const RegForm = ({ onBackClick }) => {
     register.append("mobileNo", formData.mobileNo);
     register.append("nicNumber", formData.nic);
     register.append("password", formData.password);
-    register.append("userImage", userImage);
+    {
+      profilePicture && register.append("userImage", userImage);
+    }
 
     try {
       await API.signup(register);
@@ -145,7 +147,7 @@ const RegForm = ({ onBackClick }) => {
             <div className="relative w-24 h-24 mb-5 rounded-full ">
               <img
                 src={profilePicture}
-                alt="Profile Picture"
+                alt="Profile Pic"
                 className="object-cover w-full h-full border-[3px] rounded-full border-primary1 cursor-pointer"
                 onClick={handleAddPictureClick}
               />

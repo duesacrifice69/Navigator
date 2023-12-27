@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import { DateCalendar, PickersDay } from "@mui/x-date-pickers";
 import { Badge } from "@mui/material";
 import api from "../../api";
@@ -22,7 +20,9 @@ const Attendance = ({ onClose }) => {
   };
 
   const getInTimeOutTime = (date) => {
-    const matchingData = leavesData.find((data) => dayjs(data.Date).isSame(date));
+    const matchingData = leavesData.find((data) =>
+      dayjs(data.Date).isSame(date)
+    );
     if (matchingData) {
       return (
         <div className="flex flex-row ">
@@ -57,7 +57,7 @@ const Attendance = ({ onClose }) => {
 
   function ServerDay(props) {
     const { day, outsideCurrentMonth, ...other } = props;
-console.log(day)
+    console.log(day);
     const isSelected =
       !props.outsideCurrentMonth &&
       leavesData.some((data) => dayjs(day).isSame(dayjs(data.Date)));
@@ -153,8 +153,8 @@ console.log(day)
                     m: "0 -1px !important",
                   },
                   "& .MuiPickersDay-today": {
-                    border:"none"
-                  }
+                    border: "none",
+                  },
                 }}
               />
             </div>

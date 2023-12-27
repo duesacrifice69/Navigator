@@ -1,5 +1,3 @@
-import React from "react";
-
 const Personal = ({ onClose }) => {
   const user = {
     name: "Dinuka Bandara",
@@ -40,7 +38,7 @@ const Personal = ({ onClose }) => {
         >
           <img
             src={user.imageUrl}
-            alt="Profile Picture"
+            alt="Profile Pic"
             className="object-cover items-center justify-center max-md:w-[100px] max-md:h-[100px] h-[180px] w-[180px] border-[3px] rounded-full border-primary1 cursor-pointer"
           />
         </div>

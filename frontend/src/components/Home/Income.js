@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import { useState } from "react";
 import IncomeInfo from "./IncomeInfo";
 import { DateCalendar } from "@mui/x-date-pickers";
 import dayjs from "dayjs";

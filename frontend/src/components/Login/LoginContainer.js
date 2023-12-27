@@ -1,5 +1,5 @@
-import React from "react";
 import { LoginImg } from "../../assets";
+
 const LoginContainer = ({ children, LoginHeight, LoginSpace }) => {
   const LSpace = {
     height: LoginSpace,
@@ -12,7 +12,7 @@ const LoginContainer = ({ children, LoginHeight, LoginSpace }) => {
     <div className="md:flex ">
       <div className="w-[600px] flex flex-col justify-center max-md:hidden pt-[150px] mr-[30px] ">
         <div>
-          <img src={LoginImg} className="md:w-[600px]"></img>
+          <img alt="" src={LoginImg} className="md:w-[600px]"></img>
         </div>
         <div
           className="ml-[10vw] items-center ml-3 mr-3 max-[1100px]:text-xl text-4xl font-bold text-right text-primary2"
@@ -23,7 +23,7 @@ const LoginContainer = ({ children, LoginHeight, LoginSpace }) => {
       </div>
 
       <div className="md:hidden " style={LSpace}>
-        <img src={LoginImg} className="md:w-[300px] pt-6"></img>
+        <img alt="" src={LoginImg} className="md:w-[300px] pt-6"></img>
       </div>
 
       <div className="flex justify-end md:flex-1 ">

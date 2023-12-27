@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-
-import Calendar from "react-calendar";
-
 import TablePagination from "@mui/material/TablePagination";
 import { DateCalendar, PickersDay } from "@mui/x-date-pickers";
 import { Badge } from "@mui/material";
@@ -12,7 +9,6 @@ const Attendance = ({ onClose }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [attendance, setAttendance] = useState([]);
   const [view, setView] = useState("calendar");
-  const [date, setDate] = useState(null);
 
   const handleClickDate = (date) => {
     setSelectedDate(date);
@@ -27,8 +23,8 @@ const Attendance = ({ onClose }) => {
   }, []);
 
   const getInTimeOutTime = (date) => {
-    const matchingData = attendance.find(
-      (attendance) => dayjs(attendance.Date).isSame(date)
+    const matchingData = attendance.find((attendance) =>
+      dayjs(attendance.Date).isSame(date)
     );
     if (matchingData) {
       return (
@@ -49,7 +45,6 @@ const Attendance = ({ onClose }) => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const totalItems = attendance.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
@@ -164,8 +159,8 @@ const Attendance = ({ onClose }) => {
                     m: "0 -1px !important",
                   },
                   "& .MuiPickersDay-today": {
-                    border:"none"
-                  }
+                    border: "none",
+                  },
                 }}
               />
             </div>

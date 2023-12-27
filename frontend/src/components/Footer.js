@@ -1,5 +1,4 @@
-import React from "react";
-import { EmblemofSriLanka, intropag, logogov } from "../assets";
+// import { EmblemofSriLanka, intropag, logogov } from "../assets";
 
 const Footer = () => {
   return (

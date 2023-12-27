@@ -1,26 +1,24 @@
-import React from "react";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { User, logo } from "../../assets";
 import UserCard from "./UserCard";
 
-const Navbar = ({user,active,setUser}) => {
-  const {name,userRole} = user;
+const Navbar = ({ user, active, setUser }) => {
+  const { name, userRole } = user;
   const isAdmin = userRole === "Admin";
   const navigate = useNavigate();
 
-  const handleLogout = ()=>{
+  const handleLogout = () => {
     localStorage.clear();
     navigate("/Login");
     setUser(null);
-
-  }
+  };
 
   return (
     <div className="relative z-20 animate-fade-down animate-once">
       <div className="h-[60px] max-md:h-0 "></div>
       <div className="md:fixed md:top-0 w-full max-md:h-[80px] h-[60px] md:px-[40px] bg-primary3 max-md:justify-center items-center flex md:justify-between">
         {/* Logo */}
-        <img src={logo} className="w-[250px]"></img>
+        <img alt="" src={logo} className="w-[250px]"></img>
 
         {/* Menu */}
         <div>
@@ -62,6 +60,7 @@ const Navbar = ({user,active,setUser}) => {
           <div className="flex items-center p-[6px] pr-2 border-2 border-transparent cursor-pointer max-md:hidden hover:border-primary2 hover:shadow-md">
             <div className="flex items-center">
               <img
+                alt=""
                 src={User}
                 className="w-[30px] mr-1 object-cover border-2 border-gray-600 rounded-full"
               ></img>

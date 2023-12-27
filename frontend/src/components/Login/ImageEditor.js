@@ -16,7 +16,6 @@ const ImageEditor = ({ image, onSave, onCancel }) => {
     }
   };
 
-
   const updateEditorSize = () => {
     const isMobile = window.innerWidth <= 768;
     if (isMobile) {
@@ -29,7 +28,6 @@ const ImageEditor = ({ image, onSave, onCancel }) => {
   };
 
   useEffect(() => {
-
     updateEditorSize();
     window.addEventListener("resize", updateEditorSize);
     return () => {
@@ -60,8 +58,18 @@ const ImageEditor = ({ image, onSave, onCancel }) => {
         />
       </div>
       <div className="flex flex-row mb-4 w-[250px]">
-        <button className="w-full px-4 py-2 mr-3 text-white rounded bg-primary2 hover:bg-primary1 focus:outline-none focus:shadow-outline" onClick={handleSave}>Save</button>
-        <button className="w-full px-4 py-2 text-white rounded bg-primary2 hover:bg-primary1 focus:outline-none focus:shadow-outline" onClick={onCancel}>Cancel</button>
+        <button
+          className="w-full px-4 py-2 mr-3 text-white rounded bg-primary2 hover:bg-primary1 focus:outline-none focus:shadow-outline"
+          onClick={handleSave}
+        >
+          Save
+        </button>
+        <button
+          className="w-full px-4 py-2 text-white rounded bg-primary2 hover:bg-primary1 focus:outline-none focus:shadow-outline"
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );

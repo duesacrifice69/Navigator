@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  NavBar,
   Card,
   Personal,
   Attendance,
@@ -8,7 +7,6 @@ import {
   Income,
   Liabilities,
   Circulars,
-  Footer,
   MobileNavBar,
 } from "../components";
 
@@ -106,7 +104,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    setNotificationConH(`${ref?.current?.offsetHeight}` + "px");
+    setNotificationConH(`${ref?.current?.offsetHeight}px`);
   }, [ref, setNotificationConH]);
 
   return (

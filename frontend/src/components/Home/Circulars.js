@@ -53,26 +53,6 @@ const Circulars = ({ onClose }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  function calculateTimeDifference(dateStr) {
-    const currentDate = new Date();
-    const circularDate = new Date(dateStr);
-    const timeDifference = circularDate - currentDate;
-
-    if (timeDifference < 0) {
-      return `${-Math.floor(
-        timeDifference / (1000 * 3600 * 24)
-      )} days and ${-Math.floor(
-        (timeDifference % (1000 * 3600 * 24)) / (1000 * 3600)
-      )} hours ago`;
-    } else {
-      return `in ${Math.floor(
-        timeDifference / (1000 * 3600 * 24)
-      )} days and ${Math.floor(
-        (timeDifference % (1000 * 3600 * 24)) / (1000 * 3600)
-      )} hours`;
-    }
-  }
-
   function filterDataByDate() {
     if (!startDate || !endDate) {
       setFilteredData(sampleData);
@@ -92,8 +72,6 @@ const Circulars = ({ onClose }) => {
   // Pagination
   const itemsPerPage = 5;
   const totalItems = filteredData.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
   const paginatedData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
