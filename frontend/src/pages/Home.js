@@ -74,7 +74,6 @@ const Home = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex-grow">
-        {/* <NavBar userRole={sampleUserData.role} /> */}
         <div className={showComponent ? "hidden" : ""}>
           <div className="flex mt-5 mb-5 max-md:flex-col md:flex-row">
             {/* Card container */}
@@ -145,7 +144,6 @@ const Home = () => {
           <Circulars onClose={() => toggleVisibility("Circulars")} />
         )}
       </div>
-      {/* <Footer /> */}
       <MobileNavBar userRole={sampleUserData.role} />
     </div>
   );

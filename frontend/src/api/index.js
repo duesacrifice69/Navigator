@@ -78,7 +78,7 @@ const getEvents = async () => {
   const response = await API.get("api/users/events", config);
   return response.data;
 };
-const getLiabilitieses = async () => {
+const getLiabilities = async () => {
   const response = await API.get("api/users/liabilities", config);
   return response.data;
 };
@@ -103,7 +103,7 @@ const api = {
   getLeaves,
   getIncome,
   getEvents,
-  getLiabilitieses,
+  getLiabilities,
   getDeduction,
   getProfile,
 };

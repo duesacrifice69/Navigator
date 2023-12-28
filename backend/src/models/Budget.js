@@ -19,7 +19,7 @@ const Budget = sequelize.define("Budget", {
     allowNull: false,
   },
   Amount: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     allowNull: false,
   },
 });

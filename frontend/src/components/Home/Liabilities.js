@@ -1,14 +1,9 @@
+import { useEffect, useState } from "react";
+import api from "../../api";
+import dayjs from "dayjs";
+
 const Liabilities = ({ onClose }) => {
-  const sampleData = [
-    {
-      date: "2023.01.09",
-      loanAmount: 2627611,
-      installmentAmount: 36115,
-      noOfInstallments: 51,
-      outAmount: 758415,
-      outInstallments: 21,
-    },
-  ];
+  const [sampleData, setSampleData] = useState([]);
 
   const calculateMonths = (startDate) => {
     const currentDate = new Date();
@@ -20,7 +15,13 @@ const Liabilities = ({ onClose }) => {
     return monthsDifference;
   };
 
-  const todayDate = new Date().toLocaleDateString();
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await api.getLiabilities();
+      setSampleData(data?.data);
+    };
+    fetchData();
+  }, []);
 
   return (
     <div>
@@ -36,7 +37,7 @@ const Liabilities = ({ onClose }) => {
           </div>
 
           <div className="flex items-center justify-center ">
-            <div className="mx-5 max-w-[1000px] flex-1 animate-fade-up animate-once">
+            <div className="mx-5 max-w-[1000px] flex flex-col flex-1 gap-[5rem] animate-fade-up animate-once">
               {sampleData.length > 0 ? (
                 <>
                   {sampleData.map((data, index) => (
@@ -49,7 +50,7 @@ const Liabilities = ({ onClose }) => {
                         <div className="w-[50%]">Date Granted</div>
                         <div>:</div>
                         <div className="w-[50%] flex justify-end">
-                          {todayDate}
+                          {dayjs(data.date).format("DD/MM/YYYY")}
                         </div>
                       </div>
 
@@ -77,8 +78,8 @@ const Liabilities = ({ onClose }) => {
                         </div>
                       </div>
 
-                      <div className="mt-6 border-t border-black border-dashed">
-                        <div className="mt-6">
+                      <div className="my-6 border-t border-black border-dashed">
+                        <div className="my-6">
                           <div className="font-bold">OUTSTANDING</div>
                           <div className="flex mt-3 ">
                             <div className="w-[50%]">Amount</div>
