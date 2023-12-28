@@ -26,7 +26,7 @@ const Attendance = ({ onClose }) => {
     if (matchingData) {
       return (
         <div className="flex flex-row ">
-          <strong>{matchingData.Date} :</strong>
+          <strong>{dayjs(matchingData.Date).format("MM/DD/YYYY")} :</strong>
           <div className="ml-5">{matchingData.Type}</div>
         </div>
       );
@@ -57,7 +57,6 @@ const Attendance = ({ onClose }) => {
 
   function ServerDay(props) {
     const { day, outsideCurrentMonth, ...other } = props;
-    console.log(day);
     const isSelected =
       !props.outsideCurrentMonth &&
       leavesData.some((data) => dayjs(day).isSame(dayjs(data.Date)));
@@ -153,7 +152,7 @@ const Attendance = ({ onClose }) => {
                     m: "0 -1px !important",
                   },
                   "& .MuiPickersDay-today": {
-                    border: "none",
+                    border: "none !important",
                   },
                 }}
               />
@@ -161,9 +160,7 @@ const Attendance = ({ onClose }) => {
             {/* Data */}
             <div className="md:w-[45vw] md:ml-[1vw] md:mr-[2vw] max-md:m-5 h-24">
               {selectedDate ? (
-                <div>
-                  {getInTimeOutTime(dayjs(selectedDate).format("MM/DD/YYYY"))}
-                </div>
+                <div>{getInTimeOutTime(selectedDate)}</div>
               ) : (
                 "Select a date to view in-time and out-time"
               )}

@@ -1,57 +1,70 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CircularsFilter } from "..";
 import TablePagination from "@mui/material/TablePagination";
+import api from "../../api";
+import dayjs from "dayjs";
 
-const sampleData = [
-  {
-    number: "1103",
-    Title: "Festival",
-    discription: "Festival Advance",
-    date: "10/30/2023",
-    Time: "8:15",
-  },
-  {
-    number: "1123",
-    Title: "Festival",
-    discription: "Festival Advance",
-    date: "11/1/2023",
-    Time: "8:15",
-  },
-  {
-    number: "1103",
-    Title: "Festival",
-    discription: "Festival Advance",
-    date: "11/3/2023",
-    Time: "16:15",
-  },
-  {
-    number: "11203",
-    Title: "Festival",
-    discription: "Festival Advance",
-    date: "11/9/2023",
-    Time: "8:15",
-  },
-  {
-    number: "11103",
-    Title: "Festival",
-    discription: "Festival Advance",
-    date: "11/11/2023",
-    Time: "8:15",
-  },
-  {
-    number: "111033",
-    Title: "Festival",
-    discription: "Festival Advance",
-    date: "11/15/2023",
-    Time: "8:15",
-  },
-].sort((item2, item1) => new Date(item1.date) - new Date(item2.date));
+// const sampleData = [
+//   {
+//     number: "1103",
+//     Title: "Festival",
+//     discription: "Festival Advance",
+//     date: "10/30/2023",
+//     Time: "8:15",
+//   },
+//   {
+//     number: "1123",
+//     Title: "Festival",
+//     discription: "Festival Advance",
+//     date: "11/1/2023",
+//     Time: "8:15",
+//   },
+//   {
+//     number: "1103",
+//     Title: "Festival",
+//     discription: "Festival Advance",
+//     date: "11/3/2023",
+//     Time: "16:15",
+//   },
+//   {
+//     number: "11203",
+//     Title: "Festival",
+//     discription: "Festival Advance",
+//     date: "11/9/2023",
+//     Time: "8:15",
+//   },
+//   {
+//     number: "11103",
+//     Title: "Festival",
+//     discription: "Festival Advance",
+//     date: "11/11/2023",
+//     Time: "8:15",
+//   },
+//   {
+//     number: "111033",
+//     Title: "Festival",
+//     discription: "Festival Advance",
+//     date: "11/15/2023",
+//     Time: "8:15",
+//   },
+// ].sort((item2, item1) => new Date(item1.date) - new Date(item2.date));
+
 const Circulars = ({ onClose }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilter, setShowFilter] = useState(false);
-  const [filteredData, setFilteredData] = useState(sampleData);
+  const [sampleData, setSampleData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await api.getCirculars();
+      setFilteredData(data);
+      setSampleData(data);
+    };
+    fetchData();
+  }, []);
 
   function filterDataByDate() {
     if (!startDate || !endDate) {
@@ -121,15 +134,15 @@ const Circulars = ({ onClose }) => {
                   </div>
                   <div className="flex flex-col ml-2">
                     <div className="flex flex-row">
-                      <strong className="mb-1 mr-1">{data.number} </strong>
-                      <strong>{data.Title}</strong>
+                      <strong className="mb-1 mr-1">{data.id} </strong>
+                      <strong>{data.title}</strong>
                     </div>
-                    {data.discription}
+                    {data.description}
                   </div>
                 </div>
               </div>
               <div className="mr-3 text-[12px] text-gray-800 text-right">
-                {data.date} - {data.timeDifference}
+                {dayjs(data.date).format("DD/MM/YYYY - HH:mm")}
               </div>
             </div>
           ))}

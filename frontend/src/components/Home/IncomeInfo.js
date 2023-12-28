@@ -1,54 +1,21 @@
 import { useState } from "react";
 
-const IncomeInfo = () => {
+const IncomeInfo = ({ data }) => {
+  const { deductionData, earningData } = data;
   const [view, setView] = useState("Earnings");
 
   const toggleView = (newView) => {
     setView(newView);
   };
 
-  const DataEarnings = [
-    {
-      Basic_Salary: 285326.0,
-      Allowance: 9209.5,
-      Tea_Allowance: 650,
-      CostOfLiving_Allowance: 7800.0,
-      Productivity_Allowance: 10576.25,
-      Telephone_Bill_Reimbursement: 2245.05,
-      OPD_Treatment: 833.33,
-    },
-  ];
+  const totalEarnings = earningData
+    ? earningData.reduce((total, data) => total + data.Amount, 0)
+    : 0;
+  const totalDeductions = deductionData
+    ? deductionData.reduce((total, data) => total + data.Amount, 0)
+    : 0;
 
-  const DataDeductions = [
-    {
-      Transport_Charges: 720.0,
-      Distress_Loan_10_Month: 36115.0,
-      Distress_Loan_10_Month_Interest: 2780.86,
-      Sports_club: 10.0,
-      Stamp_deduction: 25.0,
-      By_Pass: 9510.87,
-      Medical_treatment: 4755.43,
-      Payee_monthly: 39148.23,
-    },
-  ];
-
-  const formatFieldName = (fieldName) => {
-    return fieldName
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, (c) => c.toUpperCase());
-  };
-
-  const totalEarnings = Object.values(DataEarnings[0]).reduce(
-    (total, value) => total + value,
-    0
-  );
-
-  const totalDeductions = Object.values(DataDeductions[0]).reduce(
-    (total, value) => total + value,
-    0
-  );
-
-  const NetSalary = totalEarnings - totalDeductions;
+  const NetSalary = (totalEarnings - totalDeductions).toFixed(2);
 
   return (
     <div className="animate-fade-up animate-once">
@@ -113,18 +80,19 @@ const IncomeInfo = () => {
         <div className="mx-4 max-w-[1000px] flex-1">
           {view === "Earnings" && (
             <div className="">
-              {Object.entries(DataEarnings[0]).map(([field, value], index) => (
-                <div
-                  key={index}
-                  className="flex w-[100%] mt-4 animate-fade-up animate-once"
-                >
-                  <div className="w-[50%]">{formatFieldName(field)}</div>
-                  <div>:</div>
-                  <div className="w-[50%] flex justify-end">
-                    {value.toFixed(2)}
+              {earningData &&
+                earningData.map((data, index) => (
+                  <div
+                    key={index}
+                    className="flex w-[100%] mt-4 animate-fade-up animate-once"
+                  >
+                    <div className="w-[50%]">{data.Description}</div>
+                    <div>:</div>
+                    <div className="w-[50%] flex justify-end">
+                      {data.Amount.toFixed(2)}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
               {/* Total Earnings */}
               <div className="flex mt-4 w-[100%] animate-fade-up animate-once">
                 <div className="w-[50%] font-bold">Total Earnings</div>
@@ -138,20 +106,19 @@ const IncomeInfo = () => {
 
           {view === "Deductions" && (
             <div className="">
-              {Object.entries(DataDeductions[0]).map(
-                ([field, value], index) => (
+              {deductionData &&
+                deductionData.map((data, index) => (
                   <div
                     key={index}
                     className="flex w-[100%] mt-4 animate-fade-up animate-once"
                   >
-                    <div className="w-[50%]">{formatFieldName(field)}</div>
+                    <div className="w-[50%]">{data.Description}</div>
                     <div>:</div>
                     <div className="w-[50%] flex justify-end">
-                      {value.toFixed(2)}
+                      {data.Amount.toFixed(2)}
                     </div>
                   </div>
-                )
-              )}
+                ))}
               {/* Total Deductions */}
               <div className="flex mt-4 w-[100%] animate-fade-up animate-once">
                 <div className="w-[50%] font-bold ">Total Deductions</div>

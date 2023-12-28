@@ -29,11 +29,11 @@ const Attendance = ({ onClose }) => {
     if (matchingData) {
       return (
         <div className="flex flex-row ">
-          <strong>{matchingData.Date} :</strong>
+          <strong>{dayjs(matchingData.Date).format("MM/DD/YYYY")} :</strong>
           <div className="ml-5">
-            In Time: {matchingData.InTime}
+            In Time: {dayjs(matchingData.InTime).format("hh:mm A")}
             <br />
-            Out Time: {matchingData.OutTime}
+            Out Time: {dayjs(matchingData.OutTime).format("hh:mm A")}
           </div>
         </div>
       );
@@ -159,7 +159,7 @@ const Attendance = ({ onClose }) => {
                     m: "0 -1px !important",
                   },
                   "& .MuiPickersDay-today": {
-                    border: "none",
+                    border: "none !important",
                   },
                 }}
               />
@@ -167,9 +167,7 @@ const Attendance = ({ onClose }) => {
             {/* Data */}
             <div className="md:w-[45vw] md:ml-[1vw] md:mr-[2vw] max-md:m-5 h-24">
               {selectedDate ? (
-                <div>
-                  {getInTimeOutTime(dayjs(selectedDate).format("MM/DD/YYYY"))}
-                </div>
+                <div>{getInTimeOutTime(selectedDate)}</div>
               ) : (
                 "Select a date to view in-time and out-time"
               )}
@@ -194,9 +192,15 @@ const Attendance = ({ onClose }) => {
               <tbody>
                 {paginatedData.map((attendance, index) => (
                   <tr key={index} style={{ borderBottom: "1px solid #ccc" }}>
-                    <td style={{ padding: "8px" }}>{attendance.date}</td>
-                    <td style={{ padding: "8px" }}>{attendance.inTime}</td>
-                    <td style={{ padding: "8px" }}>{attendance.outTime}</td>
+                    <td style={{ padding: "8px" }}>
+                      {dayjs(attendance.Date).format("DD/MM/YYYY")}
+                    </td>
+                    <td style={{ padding: "8px" }}>
+                      {dayjs(attendance.InTime).format("hh:mm A")}
+                    </td>
+                    <td style={{ padding: "8px" }}>
+                      {dayjs(attendance.OutTime).format("hh:mm A")}
+                    </td>
                   </tr>
                 ))}
               </tbody>

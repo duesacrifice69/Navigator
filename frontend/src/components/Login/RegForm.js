@@ -107,7 +107,7 @@ const RegForm = ({ onBackClick }) => {
     register.append("name", formData.name);
     register.append("email", formData.email);
     register.append("employeeNumber", formData.employeeNumber);
-    register.append("mobileNo", formData.mobileNo);
+    register.append("mobile", formData.mobileNo);
     register.append("nicNumber", formData.nic);
     register.append("password", formData.password);
     {
@@ -116,6 +116,7 @@ const RegForm = ({ onBackClick }) => {
 
     try {
       await API.signup(register);
+      onBackClick();
     } catch (error) {
       console.log(error);
     }

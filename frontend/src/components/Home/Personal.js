@@ -1,24 +1,36 @@
+import { useEffect, useState } from "react";
+import api from "../../api";
+const initUser = {
+  name: "",
+  birthday: "",
+  address: "",
+  nic: "",
+  email: "",
+  empno: "",
+  mobileno: "",
+  imageUrl: "https://i.imgur.com/yXOvdOSs.jpg",
+};
+
 const Personal = ({ onClose }) => {
-  const user = {
-    name: "Dinuka Bandara",
-    birthday: "1998.1.1",
-    address: "kandy",
-    nic: "981234567v",
-    email: "dinuka.bandara1111@gmail.com",
-    empno: "12345",
-    mobileno: "0771234567",
-    imageUrl: "https://i.imgur.com/yXOvdOSs.jpg",
-  };
+  const [user, setUser] = useState(initUser);
 
   const fieldDisplayLabels = {
     name: "Name",
     birthday: "Birthday",
     address: "Address",
-    nic: "NIC Number",
+    nicNumber: "NIC Number",
     email: "Email",
-    empno: "Employee Number",
-    mobileno: "Mobile Number",
+    employeeNumber: "Employee Number",
+    mobile: "Mobile Number",
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await api.getProfile();
+      setUser(data?.data);
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="flex justify-center">
@@ -52,7 +64,8 @@ const Personal = ({ onClose }) => {
               >
                 <div className="flex flex-col w-[50%] text-right pr-3">
                   {fieldDisplayLabels[field]}
-                </div>
+                </div>{" "}
+                :
                 <div
                   className="flex flex-col w-[50%] text-left pl-3"
                   style={{ overflowWrap: "break-word" }}

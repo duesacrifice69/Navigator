@@ -8,14 +8,14 @@ const config = {
 
 const API = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL || "http://localhost:5000",
-  headers:{
-    get:{
-      Authorization:localStorage.getItem("token")
+  headers: {
+    get: {
+      Authorization: localStorage.getItem("token"),
     },
-    post:{
-      Authorization:localStorage.getItem("token")
-    }
-  }
+    post: {
+      Authorization: localStorage.getItem("token"),
+    },
+  },
 }); // 10.0.19.177
 
 const signin = async (loginData) => {
@@ -51,40 +51,44 @@ const changePassword = async (data) => {
   return response.data;
 };
 
-const getCirculars = async (data) => {
+const getCirculars = async () => {
+  const response = await API.get("api/users/events", config);
+  return response.data;
+};
+
+const getAttendance = async () => {
+  const response = await API.get("api/users/attendance", config);
+  return response.data;
+};
+
+const getLeaves = async () => {
+  const response = await API.get("api/users/leaves", config);
+  return response.data;
+};
+
+const getIncome = async ({ year, month }) => {
   const response = await API.get(
-    "api/users/permmissions/authnew",
-    data,
+    `api/users/budget?year=${year}&month=${month}`,
     config
   );
   return response.data;
 };
 
-const getAttendance = async (data) => {
-  const response = await API.get("api/users/attendance", data, config);
+const getEvents = async () => {
+  const response = await API.get("api/users/events", config);
+  return response.data;
+};
+const getLiabilitieses = async () => {
+  const response = await API.get("api/users/liabilities", config);
+  return response.data;
+};
+const getDeduction = async () => {
+  const response = await API.get("api/users/deduction", config);
   return response.data;
 };
 
-const getLeaves = async (data) => {
-  const response = await API.get("api/users/leaves", data, config);
-  return response.data;
-};
-
-const getIncome = async (data) => {
-  const response = await API.get("api/users/leavess", data, config);
-  return response.data;
-};
-
-const getEvents = async (data) => {
-  const response = await API.get("api/users/events", data, config);
-  return response.data;
-};
-const getLiabilitieses = async (data) => {
-  const response = await API.get("api/users/liabilities", data, config);
-  return response.data;
-};
-const getdeduction = async (data) => {
-  const response = await API.get("api/users/deduction", data, config);
+const getProfile = async () => {
+  const response = await API.get("api/users/profile", config);
   return response.data;
 };
 
@@ -100,6 +104,7 @@ const api = {
   getIncome,
   getEvents,
   getLiabilitieses,
-  getdeduction,
+  getDeduction,
+  getProfile,
 };
 export default api;
