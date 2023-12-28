@@ -3,17 +3,17 @@ const User = require("../models/User");
 const { generateTokens } = require("../tokenUtils");
 const nodemailer = require("nodemailer");
 const PasswordHistory = require("../models/Password");
-const { Op } = require("sequelize");
-require("dotenv").config();
 
 const login = async (req, res) => {
   const { username, password } = req.body;
 
   try {
+    const condition = /^\d+$/.test(username)
+      ? { employeeNumber: username }
+      : { email: username };
+
     const user = await User.findOne({
-      where: {
-        [Op.or]: [{ email: username }, { employeeNumber: username }],
-      },
+      where: condition,
     });
 
     if (!user) {

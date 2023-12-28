@@ -7,7 +7,7 @@ const User = sequelize.define("User", {
     allowNull: false,
   },
   employeeNumber: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false,
     unique: true,
   },
@@ -17,7 +17,7 @@ const User = sequelize.define("User", {
     unique: true,
   },
   mobile: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: true,
   },
   nicNumber: {
@@ -32,6 +32,7 @@ const User = sequelize.define("User", {
   role: {
     type: DataTypes.STRING,
     allowNull: true,
+    defaultValue: "User",
   },
   imagePath: {
     type: DataTypes.STRING,

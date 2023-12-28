@@ -8,6 +8,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const { v4: uuid } = require("uuid");
 const app = express();
+require("dotenv").config();
 
 const httpServer = require("http").createServer(app);
 const io = new Server(httpServer);
