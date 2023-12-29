@@ -13,8 +13,10 @@ const Layout = ({ auth, user, setUser }) => {
       const img = await api.getProfilePicture();
       setProfilePicture(img);
     };
-    fetchData();
-  }, []);
+    if (user?.imagePath) {
+      fetchData();
+    }
+  }, [user]);
 
   return (
     <>

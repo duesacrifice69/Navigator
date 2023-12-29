@@ -29,8 +29,10 @@ const Personal = ({ onClose }) => {
     const fetchData = async () => {
       const data = await api.getProfile();
       setUser(data?.data);
-      const img = await api.getProfilePicture();
-      setProfilePicture(img);
+      if (data?.imagePath) {
+        const img = await api.getProfilePicture();
+        setProfilePicture(img);
+      }
     };
     fetchData();
   }, []);
