@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../api";
 import { User } from "../../assets";
+import { useOutletContext } from "react-router-dom";
 const initUser = {
   name: "",
   birthday: "",
@@ -13,6 +14,7 @@ const initUser = {
 
 const Personal = ({ onClose }) => {
   const [user, setUser] = useState(initUser);
+  const [setActive, setUserToken, userToken] = useOutletContext();
   const [profilePicture, setProfilePicture] = useState(User);
 
   const fieldDisplayLabels = {
@@ -29,7 +31,7 @@ const Personal = ({ onClose }) => {
     const fetchData = async () => {
       const data = await api.getProfile();
       setUser(data?.data);
-      if (data?.imagePath) {
+      if (userToken?.image) {
         const img = await api.getProfilePicture();
         setProfilePicture(img);
       }

@@ -13,7 +13,7 @@ const Layout = ({ auth, user, setUser }) => {
       const img = await api.getProfilePicture();
       setProfilePicture(img);
     };
-    if (user?.imagePath) {
+    if (user?.image) {
       fetchData();
     }
   }, [user]);
@@ -28,7 +28,7 @@ const Layout = ({ auth, user, setUser }) => {
           profilePicture={profilePicture}
         />
       )}
-      <Outlet context={[setActive, setUser]} />
+      <Outlet context={[setActive, setUser, user]} />
       {!auth && <Footer />}
     </>
   );

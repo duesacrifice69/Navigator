@@ -81,14 +81,7 @@ const userController = {
   getRegisteredUserDetails: async (req, res) => {
     try {
       const userDetails = await User.findByPk(req.userId, {
-        attributes: [
-          "name",
-          "employeeNumber",
-          "mobile",
-          "nicNumber",
-          "email",
-          "imagePath",
-        ],
+        attributes: ["name", "employeeNumber", "mobile", "nicNumber", "email"],
       });
 
       res.status(200).json({ data: userDetails });
