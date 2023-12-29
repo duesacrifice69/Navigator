@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { User, logo } from "../../assets";
+import { logo } from "../../assets";
 import UserCard from "./UserCard";
 
-const Navbar = ({ user, active, setUser }) => {
+const Navbar = ({ user, active, setUser, profilePicture }) => {
   const { name, userRole } = user;
   const isAdmin = userRole === "Admin";
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ const Navbar = ({ user, active, setUser }) => {
             <div className="flex items-center">
               <img
                 alt=""
-                src={User}
+                src={profilePicture}
                 className="w-[30px] mr-1 object-cover border-2 border-gray-600 rounded-full"
               ></img>
             </div>
@@ -69,7 +69,11 @@ const Navbar = ({ user, active, setUser }) => {
           </div>
           {/* Dropdown user */}
           <div className="absolute animate-fade-down animate-once right-[-40px] hidden w-48 space-y-1 border bg-primary3 border-primary2 top-full group-hover:block ">
-            <UserCard name={name} onLogout={handleLogout} />
+            <UserCard
+              name={name}
+              profilePicture={profilePicture}
+              onLogout={handleLogout}
+            />
           </div>
         </div>
       </div>

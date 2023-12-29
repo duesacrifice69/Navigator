@@ -1,4 +1,6 @@
 const bcrypt = require("bcrypt");
+const path = require("node:path");
+const fs = require("node:fs");
 const User = require("../models/User");
 const PasswordHistory = require("../models/Password");
 
@@ -42,6 +44,35 @@ const userController = {
       console.error(error);
       return res.status(500).json({
         message: "User not successfully created",
+        error: error.message,
+      });
+    }
+  },
+
+  getRegisteredUserProfilePicture: async (req, res) => {
+    try {
+      const userProfilePicture = await User.findByPk(req.userId, {
+        attributes: ["imagePath", "imageMimetype"],
+      });
+
+      const fileURL = `${path.join(
+        __dirname,
+        "../../uploads",
+        userProfilePicture.imagePath
+      )}`;
+      var file = fs.createReadStream(fileURL);
+      var stat = fs.statSync(fileURL);
+      res.setHeader("Content-Length", stat.size);
+      res.setHeader("Content-Type", userProfilePicture.imageMimetype);
+      res.setHeader(
+        "Content-Disposition",
+        "attachment; filename=" + userProfilePicture.imagePath
+      );
+      file.pipe(res);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        message: "Error retrieving user image",
         error: error.message,
       });
     }

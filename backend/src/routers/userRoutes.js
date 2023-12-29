@@ -58,6 +58,9 @@ router.get("/permissions/authnew", auth, async (req, res) => {
 router.get("/profile", auth, async (req, res) => {
   userController.getRegisteredUserDetails(req, res);
 });
+router.get("/profile/picture", auth, async (req, res) => {
+  userController.getRegisteredUserProfilePicture(req, res);
+});
 
 router.post("/attendence-add", auth, attendanceController.addAttendance);
 router.get("/attendance", auth, attendanceController.getAttendance);

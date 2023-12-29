@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../api";
+import { User } from "../../assets";
 const initUser = {
   name: "",
   birthday: "",
@@ -8,11 +9,11 @@ const initUser = {
   email: "",
   empno: "",
   mobileno: "",
-  imageUrl: "https://i.imgur.com/yXOvdOSs.jpg",
 };
 
 const Personal = ({ onClose }) => {
   const [user, setUser] = useState(initUser);
+  const [profilePicture, setProfilePicture] = useState(User);
 
   const fieldDisplayLabels = {
     name: "Name",
@@ -28,6 +29,8 @@ const Personal = ({ onClose }) => {
     const fetchData = async () => {
       const data = await api.getProfile();
       setUser(data?.data);
+      const img = await api.getProfilePicture();
+      setProfilePicture(img);
     };
     fetchData();
   }, []);
@@ -43,13 +46,9 @@ const Personal = ({ onClose }) => {
             <ion-icon name="close-outline"></ion-icon>
           </button>
         </div>
-        <div
-          className="flex flex-col items-center mt-16 animate-fade-up animate-once"
-          animate-fade-up
-          animate-once
-        >
+        <div className="flex flex-col items-center mt-16 animate-fade-up animate-once">
           <img
-            src={user.imageUrl}
+            src={profilePicture}
             alt="Profile Pic"
             className="object-cover items-center justify-center max-md:w-[100px] max-md:h-[100px] h-[180px] w-[180px] border-[3px] rounded-full border-primary1 cursor-pointer"
           />

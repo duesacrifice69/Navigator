@@ -1,13 +1,11 @@
-import { User } from "../../assets";
-
-const UserCard = ({ name, onLogout }) => {
+const UserCard = ({ name, onLogout, profilePicture }) => {
   return (
     <div>
       {" "}
       <div className="flex flex-col items-center">
         <img
           alt=""
-          src={User}
+          src={profilePicture}
           className="object-cover mt-6 mb-1 border-2 border-gray-600 rounded-full w-28"
         ></img>
         <span>{name}</span>
