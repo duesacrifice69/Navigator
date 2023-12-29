@@ -62,7 +62,7 @@ const Navbar = ({ user, active, setUser, profilePicture }) => {
               <img
                 alt=""
                 src={profilePicture}
-                className="w-[30px] mr-1 object-cover border-1 border-primary1 rounded-full"
+                className="w-[30px] mr-1 object-cover border-1 border-gray-600 rounded-full"
               ></img>
             </div>
             <div className="flex items-center">{name}</div>
