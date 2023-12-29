@@ -57,12 +57,12 @@ const Navbar = ({ user, active, setUser, profilePicture }) => {
 
         {/* Username */}
         <div className="relative group">
-          <div className="flex items-center p-[6px] pr-2 border-2 border-transparent cursor-pointer max-md:hidden hover:border-primary2 hover:shadow-md">
+          <div className="flex items-center p-[6px] pr-2 cursor-pointer max-md:hidden">
             <div className="flex items-center">
               <img
                 alt=""
                 src={profilePicture}
-                className="w-[30px] mr-1 object-cover border-2 border-gray-600 rounded-full"
+                className="w-[30px] mr-1 object-cover border-1 border-primary1 rounded-full"
               ></img>
             </div>
             <div className="flex items-center">{name}</div>

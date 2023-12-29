@@ -6,7 +6,7 @@ const UserCard = ({ name, onLogout, profilePicture }) => {
         <img
           alt=""
           src={profilePicture}
-          className="object-cover mt-6 mb-1 border-2 border-gray-600 rounded-full w-28"
+          className="object-cover mt-6 mb-1 border-2 border-primary1 rounded-full w-28"
         ></img>
         <span>{name}</span>
 
