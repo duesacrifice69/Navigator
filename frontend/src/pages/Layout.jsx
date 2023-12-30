@@ -15,6 +15,8 @@ const Layout = ({ auth, user, setUser }) => {
     };
     if (user?.image) {
       fetchData();
+    } else {
+      setProfilePicture(User);
     }
   }, [user]);
 
