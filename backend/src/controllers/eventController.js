@@ -1,14 +1,25 @@
 const { Op } = require("sequelize");
 const Event = require("../models/Events");
 
+const getAllEvents = async (req, res) => {
+  try {
+    const events = await Event.findAll({ order: [["date"]] });
+
+    return res.json(events);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+};
+
 const filterEvent = async (req, res) => {
   try {
     const { startDate, endDate } = req.body;
 
-    
-
     const filterEvents = await Event.findAll({
-      where: { date: { [Op.between]: [new Date(startDate),new Date(endDate)] } },
+      where: {
+        date: { [Op.between]: [new Date(startDate), new Date(endDate)] },
+      },
     });
 
     return res.json(filterEvents);
@@ -43,4 +54,4 @@ const createEvent = async (req, res) => {
   }
 };
 
-module.exports = { createEvent, filterEvent };
+module.exports = { getAllEvents, createEvent, filterEvent };

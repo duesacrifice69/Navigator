@@ -1,12 +1,11 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const multer = require('multer'); 
-const User = require('../models/User');
-const PasswordHistory = require('../models/Password');
-const { permission } = require("../controllers/permissionController");
+const bcrypt = require("bcrypt");
+const path = require("node:path");
+const fs = require("node:fs");
+const User = require("../models/User");
+const PasswordHistory = require("../models/Password");
 
 const userController = {
-  registerUser: async (req, res, next) => {
+  registerUser: async (req, res) => {
     try {
       const {
         name,
@@ -37,18 +36,6 @@ const userController = {
         userId: newUser.id,
       });
 
-      const maxAge = 3 * 60 * 60;
-      const token = jwt.sign(
-        { id: newUser.id, name, role: "user" },
-        process.env.JWT_SECRETKEY,
-        { expiresIn: maxAge }
-      );
-
-      res.cookie("jwt", token, {
-        httpOnly: true,
-        maxAge: maxAge * 1000,
-      });
-
       return res.status(201).json({
         message: "User successfully created",
         newUser,
@@ -62,34 +49,49 @@ const userController = {
     }
   },
 
-  
+  getRegisteredUserProfilePicture: async (req, res) => {
+    try {
+      const userProfilePicture = await User.findByPk(req.userId, {
+        attributes: ["imagePath", "imageMimetype"],
+      });
+
+      const fileURL = `${path.join(
+        __dirname,
+        "../../uploads",
+        userProfilePicture.imagePath
+      )}`;
+      var file = fs.createReadStream(fileURL);
+      var stat = fs.statSync(fileURL);
+      res.setHeader("Content-Length", stat.size);
+      res.setHeader("Content-Type", userProfilePicture.imageMimetype);
+      res.setHeader(
+        "Content-Disposition",
+        "attachment; filename=" + userProfilePicture.imagePath
+      );
+      file.pipe(res);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        message: "Error retrieving user image",
+        error: error.message,
+      });
+    }
+  },
+
   getRegisteredUserDetails: async (req, res) => {
-  try {
-  const userDetails = await User.findByPk(req.userId, {
-    attributes: {
-      exclude: [
-        "password",
-        "Id",
-        "createdAt",
-        "updatedAt",
-        "imageMimetype",
-        "verificationCode",
-        "verificationCodeExpiration",
-      
-      ],
-    },
-  });
+    try {
+      const userDetails = await User.findByPk(req.userId, {
+        attributes: ["name", "employeeNumber", "mobile", "nicNumber", "email"],
+      });
 
-    const token = permission(userDetails.dataValues);
-    res.status(200).json({token});
-
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      message: "Error retrieving user details",
-      error: error.message,
-    });
-  }
+      res.status(200).json({ data: userDetails });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        message: "Error retrieving user details",
+        error: error.message,
+      });
+    }
   },
 };
 

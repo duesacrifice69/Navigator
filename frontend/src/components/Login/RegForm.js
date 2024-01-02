@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { User } from "../../assets";
 import { ImageEditor } from "../";
 import API from "../../api";
@@ -43,19 +43,20 @@ const RegForm = ({ onBackClick }) => {
       setOriginalImage(URL.createObjectURL(file));
       setProfilePicture(URL.createObjectURL(file));
       setProfilePictureBin(file);
-      console.log(URL.createObjectURL(file));
       setEditingImage(URL.createObjectURL(file));
     }
   };
-  // const handleProfilePictureChange = (e) => {
-  //   const file = e.target.files[0];
-
-  //   if (file) {
-  //     setOriginalImage(URL.createObjectURL(file));
-  //     setProfilePicture(file);
-  //     setEditingImage(null);
-  //   }
-  // };
+  const dataURLtoFile = (dataurl, filename) => {
+    var arr = dataurl.split(","),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  };
 
   const handleImageEditSave = (editedImage) => {
     setProfilePicture(editedImage);
@@ -97,23 +98,23 @@ const RegForm = ({ onBackClick }) => {
       alert("Please fill in all required fields");
       return;
     }
-    console.log(profilePicture);
-    const userImage = new File([profilePicture], profilePictureBin.name, {
-      type: "image/png",
-    });
-    console.log(URL.createObjectURL(userImage));
-    
+
     const register = new FormData();
     register.append("name", formData.name);
     register.append("email", formData.email);
     register.append("employeeNumber", formData.employeeNumber);
-    register.append("mobileNo", formData.mobileNo);
+    register.append("mobile", formData.mobileNo);
     register.append("nicNumber", formData.nic);
     register.append("password", formData.password);
-    register.append("userImage", userImage);
+
+    if (profilePictureBin) {
+      const userImage = dataURLtoFile(profilePicture, profilePictureBin?.name);
+      register.append("userImage", userImage);
+    }
 
     try {
       await API.signup(register);
+      onBackClick();
     } catch (error) {
       console.log(error);
     }
@@ -145,7 +146,7 @@ const RegForm = ({ onBackClick }) => {
             <div className="relative w-24 h-24 mb-5 rounded-full ">
               <img
                 src={profilePicture}
-                alt="Profile Picture"
+                alt="Profile Pic"
                 className="object-cover w-full h-full border-[3px] rounded-full border-primary1 cursor-pointer"
                 onClick={handleAddPictureClick}
               />

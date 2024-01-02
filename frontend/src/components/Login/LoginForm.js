@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { logo } from "../../assets";
 import { jwtDecode } from "jwt-decode";
 import api from "../../api";
-import { useNavigate,useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const initState = {
   username: "",
@@ -10,8 +10,8 @@ const initState = {
   remeberMe: false,
 };
 
-const LoginForm = ({onRegisterClick, onResetClick }) => {
-  const [setActive,setUser] = useOutletContext();
+const LoginForm = ({ onRegisterClick, onResetClick }) => {
+  const [setActive, setUser] = useOutletContext();
   const [loginData, setLoginData] = useState(initState);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +21,7 @@ const LoginForm = ({onRegisterClick, onResetClick }) => {
     try {
       const data = await api.signin(loginData);
       localStorage.setItem("token", data.accessToken);
-      setUser(jwtDecode(data.accessToken))
+      setUser(jwtDecode(data.accessToken));
       navigate("/home");
     } catch (error) {
       console.log(error);
@@ -92,13 +92,12 @@ const LoginForm = ({onRegisterClick, onResetClick }) => {
             Remember Me
           </label>
         </div>
-        <a
-          href="#"
+        <span
           className="text-sm font-semibold text-primary2 hover:underline"
           onClick={onResetClick}
         >
           Forgot Password?
-        </a>
+        </span>
       </div>
       <div className="mt-[30px]" />
       <button
@@ -110,9 +109,9 @@ const LoginForm = ({onRegisterClick, onResetClick }) => {
       <div className="flex justify-center mt-[15px] mb-10 md:mb">
         <div className="pl-[10px]">
           Don't have an account?{" "}
-          <a href="#" className="text-ColorRed" onClick={onRegisterClick}>
+          <span className="text-ColorRed" onClick={onRegisterClick}>
             Register
-          </a>
+          </span>
         </div>
       </div>
     </form>

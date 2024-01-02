@@ -1,16 +1,29 @@
-import React, { useState } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import { useEffect, useState } from "react";
 import IncomeInfo from "./IncomeInfo";
 import { DateCalendar } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import api from "../../api";
 
 const Income = ({ onClose }) => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
+  const [incomeData, setIncomeData] = useState({
+    deductionData: null,
+    earningData: null,
+  });
 
   const handleYearMonthChange = (date) => {
     setSelectedDate(date);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const month = dayjs(selectedDate).format("MM");
+      const year = dayjs(selectedDate).format("YYYY");
+      const data = await api.getIncome({ year, month });
+      setIncomeData(data);
+    };
+    fetchData();
+  }, [selectedDate]);
 
   return (
     <div>
@@ -44,14 +57,20 @@ const Income = ({ onClose }) => {
             {/* Selected Year and Month */}
             <div className="m-5">
               <h2>
-                Selected Year and Month:{" "}
-                {selectedDate ? dayjs(selectedDate).format("MMMM") : "None"}
+                Selected Year and Month :{" "}
+                {selectedDate ? (
+                  <span className="font-medium">
+                    {dayjs(selectedDate).format("MMMM YYYY")}
+                  </span>
+                ) : (
+                  "None"
+                )}
               </h2>
             </div>
           </div>
           {selectedDate ? (
             <>
-              <IncomeInfo />
+              <IncomeInfo data={incomeData} />
             </>
           ) : (
             <div className="flex items-center justify-center animate-fade-up animate-once">

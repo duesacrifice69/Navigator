@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  NavBar,
   Card,
   Personal,
   Attendance,
@@ -8,54 +7,10 @@ import {
   Income,
   Liabilities,
   Circulars,
-  Footer,
   MobileNavBar,
 } from "../components";
-
-const sampleData = [
-  {
-    number: "1103",
-    Title: "Festival 66",
-    discription: "Festival Advance66",
-    date: "10/30/2023",
-    Time: "8:15",
-  },
-  {
-    number: "1123",
-    Title: "Festival 55",
-    discription: "Festival Advance55",
-    date: "11/1/2023",
-    Time: "8:15",
-  },
-  {
-    number: "1103",
-    Title: "Festival 44",
-    discription: "Festival Advance44",
-    date: "11/3/2023",
-    Time: "16:15",
-  },
-  {
-    number: "11203",
-    Title: "Festival 33",
-    discription: "Festival Advance33",
-    date: "11/9/2023",
-    Time: "8:15",
-  },
-  {
-    number: "11103",
-    Title: "Festival 22",
-    discription: "Festival Advance22",
-    date: "11/11/2023",
-    Time: "8:15",
-  },
-  {
-    number: "111033",
-    Title: "Festival 11",
-    discription: "Festival Advance11",
-    date: "11/15/2023",
-    Time: "8:15",
-  },
-];
+import api from "../api";
+import dayjs from "dayjs";
 
 const sampleUserData = {
   username: "Dinuka",
@@ -95,10 +50,9 @@ const Cards = [
   },
 ];
 
-const reversedSampleData = sampleData.slice().reverse();
-
 const Home = () => {
   const [showComponent, setShowComponent] = useState(null);
+  const [sampleData, setSampleData] = useState([]);
   const ref = useRef();
   const [notificationConH, setNotificationConH] = useState(350);
   const toggleVisibility = (componentName) => {
@@ -106,13 +60,20 @@ const Home = () => {
   };
 
   useEffect(() => {
-    setNotificationConH(`${ref?.current?.offsetHeight}` + "px");
+    const fetchData = async () => {
+      const data = await api.getCirculars();
+      setSampleData(data);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setNotificationConH(`${ref?.current?.offsetHeight}px`);
   }, [ref, setNotificationConH]);
 
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex-grow">
-        {/* <NavBar userRole={sampleUserData.role} /> */}
         <div className={showComponent ? "hidden" : ""}>
           <div className="flex mt-5 mb-5 max-md:flex-col md:flex-row">
             {/* Card container */}
@@ -144,19 +105,19 @@ const Home = () => {
               className="md:w-[47vw] md:ml-[1vw] w-[96vw] bg-slate-100 max-md:rounded-3xl md:rounded-l-3xl max-md:ml-[2vw] max-md:mt-3 overflow-y-scroll shadow-lg shadow-slate-400"
             >
               <div className="mr-[5%] ml-[5%] mt-6 mb-6">
-                {reversedSampleData.map((data, index) => (
+                {sampleData.map((data, index) => (
                   <div
                     key={index}
                     className="w-[100%] bg-gray-200 rounded-2xl p-2 my-3 animate-fade-down animate-once shadow-sm shadow-slate-400"
                   >
                     <div>
                       <strong>
-                        {data.number} - {data.Title}
+                        {data.id} - {data.title}
                       </strong>
                     </div>
-                    <div>{data.discription}</div>
+                    <div>{data.description}</div>
                     <div className="text-[12px] text-gray-500">
-                      {data.date} - {data.Time}
+                      {dayjs(data.date).format("DD/MM/YYYY - HH:mm")}
                     </div>
                   </div>
                 ))}
@@ -183,7 +144,6 @@ const Home = () => {
           <Circulars onClose={() => toggleVisibility("Circulars")} />
         )}
       </div>
-      {/* <Footer /> */}
       <MobileNavBar userRole={sampleUserData.role} />
     </div>
   );

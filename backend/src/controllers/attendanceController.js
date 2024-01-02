@@ -1,6 +1,4 @@
-
 const Attendance = require("../models/Attendance");
-const { Op } = require("sequelize");
 
 const attendanceController = {
   addAttendance: async (req, res) => {
@@ -14,7 +12,7 @@ const attendanceController = {
       });
 
       console.log("Attendance added:", newAttendance);
-      
+
       res.redirect("/attendance");
     } catch (error) {
       console.error(error);
@@ -23,20 +21,19 @@ const attendanceController = {
   },
 
   getAttendance: async (req, res) => {
-   // const { EmployeeNumber } = req.body;
     try {
-        const employeeNumber = req.employeeNumber;
+      const employeeNumber = req.employeeNumber;
 
-        if (!employeeNumber) {
-          return res
-            .status(400)
-            .json({ error: "employeeNumber parameter is missing" });
-        }
+      if (!employeeNumber) {
+        return res
+          .status(400)
+          .json({ error: "employeeNumber parameter is missing" });
+      }
       const attendanceRecords = await Attendance.findAll({
         where: { employeeNumber },
         attributes: ["Date", "InTime", "OutTime"],
       });
-      res.status(200).json({data:attendanceRecords});
+      res.status(200).json({ data: attendanceRecords });
     } catch (error) {
       console.error(error);
       res.status(500).send("Internal Server Error");

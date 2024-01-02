@@ -22,7 +22,9 @@ const BillingTab = () => {
           <div className="flex ml-[20px]">
             <div
               className={`text-center h-[100%] w-[100px] text-white flex justify-center items-center ${
-                selectedTab === "RSC" ? "bg-primary4 text-black" : "bg-primary5 text-white"
+                selectedTab === "RSC"
+                  ? "bg-primary4 text-black"
+                  : "bg-primary5 text-white"
               }`}
               onClick={() => handleTabClick("RSC")}
               style={{ cursor: "pointer" }}
@@ -31,7 +33,9 @@ const BillingTab = () => {
             </div>
             <div
               className={`text-center w-[100px] h-[100%] text-white flex justify-center items-center ${
-                selectedTab === "Source" ? "bg-primary4 text-black" : "bg-primary5 text-white"
+                selectedTab === "Source"
+                  ? "bg-primary4 text-black"
+                  : "bg-primary5 text-white"
               }`}
               onClick={() => handleTabClick("Source")}
               style={{ cursor: "pointer" }}
@@ -41,7 +45,9 @@ const BillingTab = () => {
           </div>
           <div
             className={`mr-[20px] text-center w-[30px] text-xl flex justify-center items-center ${
-              isFilterVisible ? "bg-primary4 text-black" : "bg-primary5 text-white"
+              isFilterVisible
+                ? "bg-primary4 text-black"
+                : "bg-primary5 text-white"
             }`}
             onClick={handleFilterClick}
             style={{ cursor: "pointer" }}

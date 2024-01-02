@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../configuration/db.config");
-const Laibility = sequelize.define("liabilities", {
+const Laibility = sequelize.define("Liabilities", {
   employeeNumber: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -14,7 +14,7 @@ const Laibility = sequelize.define("liabilities", {
     allowNull: false,
   },
   installmentAmount: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     allowNull: true,
   },
   noOfInstallments: {
@@ -22,7 +22,7 @@ const Laibility = sequelize.define("liabilities", {
     allowNull: true,
   },
   outAmount: {
-    type: DataTypes.DOUBLE,
+    type: DataTypes.FLOAT,
     allowNull: true,
   },
   outInstallments: {

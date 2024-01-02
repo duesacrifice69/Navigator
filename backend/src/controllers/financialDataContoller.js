@@ -1,55 +1,33 @@
-const Earning = require("../models/Earning");
-const Dedication = require("../models/Deduction");
+const Budget = require("../models/Budget");
 const sequelize = require("../../configuration/db.config");
 const { Op } = require("sequelize");
 
 const getFinanceData = async (req, res) => {
-  const { year, month } = req.body;
+  const { year, month } = req.query;
   const employeeNumber = req.employeeNumber;
-console.log(req.employeeNumber);
+
   try {
-    const earningData = await Earning.findOne({
+    const earningData = await Budget.findAll({
       where: {
-        [Op.eq]: [
+        [Op.and]: [
           sequelize.where(sequelize.fn("MONTH", sequelize.col("Date")), month),
           sequelize.where(sequelize.fn("YEAR", sequelize.col("Date")), year),
-          { employeeNumber },
+          { employeeNumber, BudgetType: "ALLOWANCE" },
         ],
       },
-      attributes: [
-        "Basic_Salary",
-        "Allowance",
-        "Tea_Allowance",
-        "CostOfLiving_Allowance",
-        "Productivity_Allowance",
-        "Telephone_Bill_Reimbursement",
-        "OPD_Treatment",
-      ],
-      having: sequelize.literal(`
-        "Basic_Salary" + "Allowance" + "Tea_Allowance" + "CostOfLiving_Allowance" +
-        "Productivity_Allowance" + "Telephone_Bill_Reimbursement" + "OPD_Treatment" > 0
-      `),
+      attributes: ["Description", "Amount"],
     });
-
-    const deductionData = await Dedication.findAll({
-      where: { employeeNumber, Date: req.body.Date },
-      attributes: [
-        "Transport_Charges",
-        "Distress_Loan_10_Month",
-        "Distress_Loan_10_Month_Interest",
-        "Sports_club",
-        "Stamp_deduction",
-        "By_Pass",
-        "Medical_treatment",
-        "Payee_monthly",
-      ],
-      having: sequelize.literal(`
-        "Transport_Charges" + "Distress_Loan_10_Month" + "Distress_Loan_10_Month_Interest" +
-        "Sports_club" + "Stamp_deduction" + "By_Pass" + "Medical_treatment" + "Payee_monthly" > 0
-      `),
+    const deductionData = await Budget.findAll({
+      where: {
+        [Op.and]: [
+          sequelize.where(sequelize.fn("MONTH", sequelize.col("Date")), month),
+          sequelize.where(sequelize.fn("YEAR", sequelize.col("Date")), year),
+          { employeeNumber, BudgetType: "DEDUCTION" },
+        ],
+      },
+      attributes: ["Description", "Amount"],
     });
-
-    res.json({ earningData, deductionData });
+    res.status(200).json({ earningData, deductionData });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");

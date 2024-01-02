@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import VerificationCodeInput from "./VerificationCodeInput"
+import { useEffect, useState } from "react";
+import VerificationCodeInput from "./VerificationCodeInput";
 import api from "../../api";
 
 const initState = {
@@ -149,17 +149,7 @@ const ResetPW = ({ onBackClick }) => {
               onChange={handleChange}
               length={6}
               required
-              />
-            {/* <input 
-              type="number"
-              disabled={timeRemaining === 0}
-              name="verificationCode"
-              value={forgotPasswordData.verificationCode}
-              onChange={handleChange}
-              className="w-1/2 px-3 py-2 text-sm text-gray-700 border rounded focus:outline-none focus:shadow-outline"
-              placeholder="Verification Code"
-              required
-            /> */}
+            />
             <div className="w-1/6"></div>
           </div>
           <button

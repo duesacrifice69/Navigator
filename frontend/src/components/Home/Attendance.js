@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-
-import Calendar from "react-calendar";
-
 import TablePagination from "@mui/material/TablePagination";
 import { DateCalendar, PickersDay } from "@mui/x-date-pickers";
 import { Badge } from "@mui/material";
@@ -12,7 +9,6 @@ const Attendance = ({ onClose }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [attendance, setAttendance] = useState([]);
   const [view, setView] = useState("calendar");
-  const [date, setDate] = useState(null);
 
   const handleClickDate = (date) => {
     setSelectedDate(date);
@@ -27,17 +23,17 @@ const Attendance = ({ onClose }) => {
   }, []);
 
   const getInTimeOutTime = (date) => {
-    const matchingData = attendance.find(
-      (attendance) => dayjs(attendance.Date).isSame(date)
+    const matchingData = attendance.find((attendance) =>
+      dayjs(attendance.Date).isSame(date)
     );
     if (matchingData) {
       return (
         <div className="flex flex-row ">
-          <strong>{matchingData.Date} :</strong>
+          <strong>{dayjs(matchingData.Date).format("MM/DD/YYYY")} :</strong>
           <div className="ml-5">
-            In Time: {matchingData.InTime}
+            In Time: {dayjs(matchingData.InTime).format("hh:mm A")}
             <br />
-            Out Time: {matchingData.OutTime}
+            Out Time: {dayjs(matchingData.OutTime).format("hh:mm A")}
           </div>
         </div>
       );
@@ -49,7 +45,6 @@ const Attendance = ({ onClose }) => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const totalItems = attendance.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
@@ -164,17 +159,15 @@ const Attendance = ({ onClose }) => {
                     m: "0 -1px !important",
                   },
                   "& .MuiPickersDay-today": {
-                    border:"none"
-                  }
+                    border: "none !important",
+                  },
                 }}
               />
             </div>
             {/* Data */}
             <div className="md:w-[45vw] md:ml-[1vw] md:mr-[2vw] max-md:m-5 h-24">
               {selectedDate ? (
-                <div>
-                  {getInTimeOutTime(dayjs(selectedDate).format("MM/DD/YYYY"))}
-                </div>
+                <div>{getInTimeOutTime(selectedDate)}</div>
               ) : (
                 "Select a date to view in-time and out-time"
               )}
@@ -199,9 +192,15 @@ const Attendance = ({ onClose }) => {
               <tbody>
                 {paginatedData.map((attendance, index) => (
                   <tr key={index} style={{ borderBottom: "1px solid #ccc" }}>
-                    <td style={{ padding: "8px" }}>{attendance.date}</td>
-                    <td style={{ padding: "8px" }}>{attendance.inTime}</td>
-                    <td style={{ padding: "8px" }}>{attendance.outTime}</td>
+                    <td style={{ padding: "8px" }}>
+                      {dayjs(attendance.Date).format("DD/MM/YYYY")}
+                    </td>
+                    <td style={{ padding: "8px" }}>
+                      {dayjs(attendance.InTime).format("hh:mm A")}
+                    </td>
+                    <td style={{ padding: "8px" }}>
+                      {dayjs(attendance.OutTime).format("hh:mm A")}
+                    </td>
                   </tr>
                 ))}
               </tbody>

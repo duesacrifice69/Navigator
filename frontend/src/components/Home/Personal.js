@@ -1,26 +1,43 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import api from "../../api";
+import { User } from "../../assets";
+import { useOutletContext } from "react-router-dom";
+const initUser = {
+  name: "",
+  birthday: "",
+  address: "",
+  nic: "",
+  email: "",
+  empno: "",
+  mobileno: "",
+};
 
 const Personal = ({ onClose }) => {
-  const user = {
-    name: "Dinuka Bandara",
-    birthday: "1998.1.1",
-    address: "kandy",
-    nic: "981234567v",
-    email: "dinuka.bandara1111@gmail.com",
-    empno: "12345",
-    mobileno: "0771234567",
-    imageUrl: "https://i.imgur.com/yXOvdOSs.jpg",
-  };
+  const [user, setUser] = useState(initUser);
+  const [setActive, setUserToken, userToken] = useOutletContext();
+  const [profilePicture, setProfilePicture] = useState(User);
 
   const fieldDisplayLabels = {
     name: "Name",
     birthday: "Birthday",
     address: "Address",
-    nic: "NIC Number",
+    nicNumber: "NIC Number",
     email: "Email",
-    empno: "Employee Number",
-    mobileno: "Mobile Number",
+    employeeNumber: "Employee Number",
+    mobile: "Mobile Number",
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await api.getProfile();
+      setUser(data?.data);
+      if (userToken?.image) {
+        const img = await api.getProfilePicture();
+        setProfilePicture(img);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="flex justify-center">
@@ -33,14 +50,10 @@ const Personal = ({ onClose }) => {
             <ion-icon name="close-outline"></ion-icon>
           </button>
         </div>
-        <div
-          className="flex flex-col items-center mt-16 animate-fade-up animate-once"
-          animate-fade-up
-          animate-once
-        >
+        <div className="flex flex-col items-center mt-16 animate-fade-up animate-once">
           <img
-            src={user.imageUrl}
-            alt="Profile Picture"
+            src={profilePicture}
+            alt="Profile Pic"
             className="object-cover items-center justify-center max-md:w-[100px] max-md:h-[100px] h-[180px] w-[180px] border-[3px] rounded-full border-primary1 cursor-pointer"
           />
         </div>
@@ -54,7 +67,8 @@ const Personal = ({ onClose }) => {
               >
                 <div className="flex flex-col w-[50%] text-right pr-3">
                   {fieldDisplayLabels[field]}
-                </div>
+                </div>{" "}
+                :
                 <div
                   className="flex flex-col w-[50%] text-left pl-3"
                   style={{ overflowWrap: "break-word" }}
