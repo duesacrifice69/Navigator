@@ -2,7 +2,7 @@
 
 const Footer = () => {
   return (
-    <div className="text-white max-md:text-[12px] p-5 font-bold w-full h-[255px] bg-primary2 flex items-center md:justify-around max-md:justify-between animate-fade-up animate-once -z-10">
+    <div className="text-white max-md:text-[12px] p-5 font-bold w-full h-[300px] md:h-[255px] bg-primary2 flex items-center md:justify-around max-md:justify-between animate-fade-up animate-once -z-10">
       {/* info */}
       <div className="flex flex-col mr-3 max-md:pr-5">
         <div className="flex flex-row items-center mb-3">

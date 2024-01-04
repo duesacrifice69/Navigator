@@ -21,7 +21,7 @@ const Layout = ({ auth, user, setUser }) => {
   }, [user]);
 
   return (
-    <>
+    <div className="min-h-screen">
       {!auth && (
         <NavBar
           user={user}
@@ -32,7 +32,7 @@ const Layout = ({ auth, user, setUser }) => {
       )}
       <Outlet context={[setActive, setUser, user]} />
       {!auth && <Footer />}
-    </>
+    </div>
   );
 };
 
