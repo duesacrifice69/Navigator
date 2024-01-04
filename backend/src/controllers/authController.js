@@ -60,9 +60,10 @@ const logout = async (req, res) => {
   }
 };
 async function forgotPassword(req, res) {
+   
   const { employeeNumber } = req.body;
-
   try {
+    
     const user = await User.findOne({ where: { employeeNumber } });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -85,8 +86,13 @@ async function forgotPassword(req, res) {
         const mailOptions = {
           from: "dinukanisheda9@gmail.com",
           to: email,
-          subject: "72",
-          text: `Your verification code is: ${code}`,
+          subject: "**Verification Code**",
+          html: `
+        <div style="background-color: #1B4242; color: #ffffff; padding: 10px; border-radius: 5px;">
+          <p style="font-weight: bold;">Your verification code is:</p>
+          <p style="font-weight: bold; font-size: 16px; color: #ffffff;">${code}</p>
+        </div>
+      `,
         };
 
         const info = await transporter.sendMail(mailOptions);
@@ -181,7 +187,7 @@ async function resetPassword(req, res) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password,10);
 
     const passwordHistory = user.PasswordHistories.map(
       (pHistory) => pHistory.dataValues.password

@@ -3,7 +3,7 @@ const Event = require("../models/Events");
 
 const getAllEvents = async (req, res) => {
   try {
-    const events = await Event.findAll({ order: [["date"]] });
+    const events = await Event.findAll({ order: [["createdAt","DESC"]] });
 
     return res.json(events);
   } catch (error) {

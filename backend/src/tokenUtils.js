@@ -12,6 +12,7 @@ function generateTokens(user, rememberMe = false) {
       userRole: user.role,
       name: user.name,
       image: user.imagePath ? true : false,
+      email:user.email
     },
     process.env.JWT_SECRETKEY,
     { expiresIn: accessTokenExpiresIn }
