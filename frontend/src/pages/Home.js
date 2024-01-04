@@ -11,6 +11,7 @@ import {
 } from "../components";
 import api from "../api";
 import dayjs from "dayjs";
+import { useMediaQuery } from "@mui/material";
 
 const sampleUserData = {
   username: "Dinuka",
@@ -55,6 +56,7 @@ const Home = () => {
   const [sampleData, setSampleData] = useState([]);
   const ref = useRef();
   const [notificationConH, setNotificationConH] = useState(350);
+  const isMobile = useMediaQuery("(max-width:600px)");
   const toggleVisibility = (componentName) => {
     setShowComponent(showComponent === componentName ? null : componentName);
   };
@@ -72,7 +74,10 @@ const Home = () => {
   }, [ref, setNotificationConH]);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div
+      style={{ minHeight: `calc(100vh - ${isMobile ? "375px" : "315px"})` }}
+      className="flex flex-col"
+    >
       <div className="flex-grow">
         <div className={showComponent ? "hidden" : ""}>
           <div className="flex mt-5 mb-5 max-md:flex-col md:flex-row">
@@ -144,7 +149,6 @@ const Home = () => {
           <Circulars onClose={() => toggleVisibility("Circulars")} />
         )}
       </div>
-      <MobileNavBar userRole={sampleUserData.role} />
     </div>
   );
 };

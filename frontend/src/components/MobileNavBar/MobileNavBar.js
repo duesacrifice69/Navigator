@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Settings, Feed } from "../";
+import { useOutletContext } from "react-router-dom";
 
-const MobileNavBar = ({ userRole }) => {
+const MobileNavBar = ({ user, profilePicture, onLogout }) => {
   const [selectedTab, setSelectedTab] = useState("Home");
-
   const handleTabClick = (tabName) => {
     setSelectedTab(tabName);
   };
@@ -11,19 +11,25 @@ const MobileNavBar = ({ userRole }) => {
   return (
     <div>
       {selectedTab !== "Home" && (
-        <div className="md:hidden z-20 h-full w-full bg bg-white fixed bottom-[60px] ">
+        <div className="md:hidden h-full w-full bg bg-white fixed bottom-[60px] z-20">
           <div
             className="fixed top-0 w-full bg-white"
             style={{ height: "calc(100% - 60px)" }}
           >
-            {selectedTab === "Feed" && <Feed userRole={userRole} />}
-            {selectedTab === "Settings" && <Settings />}
+            {selectedTab === "Feed" && <Feed userRole={user.userRole} />}
+            {selectedTab === "Settings" && (
+              <Settings
+                user={user}
+                profilePicture={profilePicture}
+                onLogout={onLogout}
+              />
+            )}
           </div>
         </div>
       )}
 
-      <div className="h-[60px] w-full md:hidden">
-        <div className="fixed bottom-0 w-full">
+      <div className="w-full md:hidden">
+        <div className="fixed bottom-0 z-10 w-full">
           <div
             className={`bg-white w-full h-[60px] flex flex-row ${
               selectedTab === "Home" ? "rounded-t-2xl" : ""

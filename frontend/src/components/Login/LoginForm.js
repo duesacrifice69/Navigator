@@ -3,6 +3,7 @@ import { logo } from "../../assets";
 import { jwtDecode } from "jwt-decode";
 import api from "../../api";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import Error from "./ErrorComp";
 
 const initState = {
   username: "",
@@ -12,6 +13,7 @@ const initState = {
 
 const LoginForm = ({ onRegisterClick, onResetClick }) => {
   const [setActive, setUser] = useOutletContext();
+  const [error, setError] = useState();
   const [loginData, setLoginData] = useState(initState);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +26,7 @@ const LoginForm = ({ onRegisterClick, onResetClick }) => {
       setUser(jwtDecode(data.accessToken));
       navigate("/home");
     } catch (error) {
+      setError(error?.response?.data?.message);
       console.log(error);
     }
   };
@@ -99,6 +102,7 @@ const LoginForm = ({ onRegisterClick, onResetClick }) => {
           Forgot Password?
         </span>
       </div>
+      <Error error={error} />
       <div className="mt-[30px]" />
       <button
         type="submit"

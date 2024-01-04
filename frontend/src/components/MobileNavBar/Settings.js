@@ -1,30 +1,22 @@
 import { useState } from "react";
 import { User } from "../../assets";
 
-const Settings = () => {
+const Settings = ({ user, profilePicture, onLogout }) => {
   const [showUser, setShowUser] = useState(false);
 
   const toggleUser = () => {
     setShowUser(!showUser);
   };
 
-  const sampleUser = [
-    {
-      name: "Dinuka Bandara",
-      email: "dinuka@gmail.com",
-      image: User,
-    },
-  ];
-
   return (
-    <div className="flex justify-center w-full h-full mt-5 text-lg">
+    <div className="absolute bottom-0 flex justify-center w-full h-full mt-5 text-lg">
       <div
         className="w-[90%]  border shadow-md flex flex-col relative "
         style={{ height: "calc(100% - 60px)" }}
       >
         <div className="animate-fade-right animate-once">
           <img
-            src={sampleUser[0].image}
+            src={profilePicture}
             alt="user avatar"
             className="w-20 mx-10 border rounded-full mt-9 border-primary2"
           />
@@ -36,12 +28,8 @@ const Settings = () => {
             >
               <div className="flex items-center">
                 <div className="flex flex-col">
-                  <div className="mr-1 text-3xl font-bold">
-                    {sampleUser[0].name}
-                  </div>
-                  <div className="text-sm text-primary2">
-                    {sampleUser[0].email}
-                  </div>
+                  <div className="mr-1 text-3xl font-bold">{user.name}</div>
+                  <div className="text-sm text-primary2">{user.email}</div>
                 </div>
               </div>
               <div className="flex p-1 bg-gray-200 rounded-md">
@@ -60,7 +48,10 @@ const Settings = () => {
                     <ion-icon name="chevron-forward-outline"></ion-icon>
                   </div>
                 </div>
-                <div className="flex items-center justify-between mx-10 mt-4 hover:cursor-pointer ">
+                <div
+                  className="flex items-center justify-between mx-10 mt-4 hover:cursor-pointer "
+                  onClick={onLogout}
+                >
                   <div className="flex items-center">
                     <ion-icon name="log-out-outline"></ion-icon>Log out
                   </div>
