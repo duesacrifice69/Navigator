@@ -38,9 +38,14 @@ router.post("/sendVerificationCode", forgotPassword, (req, res) => {
   res.json({ message: "forgot password successful" });
 });
 
-router.post("/submitVerificationCode", submitVerficationCode, (req, res) => {
-  res.json({ message: "verification code verified successful" });
-});
+router.post(
+  "/submitVerificationCode",
+  
+  submitVerficationCode,
+  (req, res) => {
+    res.json({ message: "verification code verified successful" });
+  }
+);
 
 router.post("/resetPassword", resetPassword, (req, res) => {
   res.json({ message: " resetPassword password successful" });
