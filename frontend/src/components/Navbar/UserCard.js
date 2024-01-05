@@ -1,4 +1,4 @@
-const UserCard = ({ name, onLogout, profilePicture }) => {
+const UserCard = ({ userRole, onLogout, profilePicture }) => {
   return (
     <div>
       {" "}
@@ -8,7 +8,7 @@ const UserCard = ({ name, onLogout, profilePicture }) => {
           src={profilePicture}
           className="object-cover mt-6 mb-1 border-2 border-primary1 rounded-full w-28"
         ></img>
-        <span>{name}</span>
+        <span>{userRole}</span>
 
         <div className="w-full mt-3 border-t-2 border-gray-400 ">
           <ul className="flex flex-col">

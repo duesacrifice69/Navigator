@@ -78,7 +78,7 @@ const Navbar = ({ user, active, setUser, profilePicture }) => {
             {/* Dropdown user */}
             <div className="absolute animate-fade-down animate-once right-[-40px] hidden w-48 space-y-1 border bg-primary3 border-primary2 top-full group-hover:block ">
               <UserCard
-                name={name}
+                userRole={userRole}
                 profilePicture={profilePicture}
                 onLogout={handleLogout}
               />
