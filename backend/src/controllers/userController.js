@@ -3,7 +3,7 @@ const path = require("node:path");
 const fs = require("node:fs");
 const User = require("../models/User");
 const PasswordHistory = require("../models/Password");
-
+const { Custom500Error } = require("../middleware/errorHandlingMiddleware");
 const userController = {
   registerUser: async (req, res) => {
     try {
@@ -41,11 +41,7 @@ const userController = {
         newUser,
       });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({
-        message: "User not successfully created",
-        error: error.message,
-      });
+      next(new Custom500Error(error.message));
     }
   },
 
@@ -70,11 +66,7 @@ const userController = {
       );
       file.pipe(res);
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({
-        message: "Error retrieving user image",
-        error: error.message,
-      });
+      next(new Custom500Error(error.message));
     }
   },
 
@@ -86,12 +78,9 @@ const userController = {
 
       res.status(200).json({ data: userDetails });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({
-        message: "Error retrieving user details",
-        error: error.message,
-      });
+      next(new Custom500Error(error.message));
     }
+
   },
 };
 

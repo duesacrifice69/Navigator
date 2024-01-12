@@ -2,8 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { logo } from "../../assets";
 import UserCard from "./UserCard";
 import { MobileNavBar } from "..";
-
+import io from "socket.io-client";
+import React, { useEffect } from "react";
 const Navbar = ({ user, active, setUser, profilePicture }) => {
+  
   const { name, userRole } = user;
   const isAdmin = userRole === "Admin";
   const navigate = useNavigate();
@@ -13,7 +15,22 @@ const Navbar = ({ user, active, setUser, profilePicture }) => {
     navigate("/Login");
     setUser(null);
   };
+   useEffect(() => {
+   const socket = io("http://localhost:3000"); // Update the server URL
 
+   // Event listeners for user presence
+   socket.on("userLoggedIn", (data) => {
+     console.log(`User ${data.userId} logged in`);
+   });
+
+   socket.on("userLoggedOut", (data) => {
+     console.log(`User ${data.userId} logged out`);
+   });
+
+   return () => {
+     socket.disconnect();
+   };
+ }, []);
   return (
     <div>
       <div className="relative z-20 animate-fade-down animate-once">
@@ -61,6 +78,10 @@ const Navbar = ({ user, active, setUser, profilePicture }) => {
                 About
               </li>
             </ul>
+            <div className="item-center p-1 border-1 border-transparent ">
+            <div>Dinuka</div>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+            </div>
           </div>
 
           {/* Username */}

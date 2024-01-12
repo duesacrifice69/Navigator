@@ -1,6 +1,7 @@
 const Budget = require("../models/Budget");
 const sequelize = require("../../configuration/db.config");
 const { Op } = require("sequelize");
+const { Custom500Error } = require("../middleware/errorHandlingMiddleware");
 
 const getFinanceData = async (req, res) => {
   const { year, month } = req.query;
@@ -29,9 +30,9 @@ const getFinanceData = async (req, res) => {
     });
     res.status(200).json({ earningData, deductionData });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
+    next(new Custom500Error(error.message));
   }
+
 };
 
 module.exports = { getFinanceData };

@@ -1,7 +1,11 @@
 const Attendance = require("../models/Attendance");
+const {
+  Custom400Error,
+  Custom500Error,
+} = require("../middleware/errorHandlingMiddleware");
 
 const attendanceController = {
-  addAttendance: async (req, res) => {
+  addAttendance: async (req, res, next) => {
     const { Date, InTime, OutTime } = req.body;
 
     try {
@@ -15,19 +19,17 @@ const attendanceController = {
 
       res.redirect("/attendance");
     } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
+      
+      next(new Custom400Error("employeeNumber parameter is missing!"));
     }
   },
 
-  getAttendance: async (req, res) => {
+  getAttendance: async (req, res, next) => {
     try {
       const employeeNumber = req.employeeNumber;
 
       if (!employeeNumber) {
-        return res
-          .status(400)
-          .json({ error: "employeeNumber parameter is missing" });
+        throw new Custom400Error("employeeNumber parameter is missing!");
       }
       const attendanceRecords = await Attendance.findAll({
         where: { employeeNumber },
@@ -35,8 +37,8 @@ const attendanceController = {
       });
       res.status(200).json({ data: attendanceRecords });
     } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
+      
+      next(new Custom500Error("server error!"));
     }
   },
 };

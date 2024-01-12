@@ -1,15 +1,17 @@
 const { Op } = require("sequelize");
 const Event = require("../models/Events");
+const { Custom500Error } = require("../middleware/errorHandlingMiddleware");
 
 const getAllEvents = async (req, res) => {
   try {
-    const events = await Event.findAll({ order: [["createdAt","DESC"]] });
+    const events = await Event.findAll({ order: [["createdAt", "DESC"]] });
 
     return res.json(events);
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Server error");
+    
+    next(new Custom500Error(error.message));
   }
+
 };
 
 const filterEvent = async (req, res) => {
@@ -24,8 +26,8 @@ const filterEvent = async (req, res) => {
 
     return res.json(filterEvents);
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Server error");
+
+    next(new Custom500Error(error.message));
   }
 };
 
@@ -49,8 +51,8 @@ const createEvent = async (req, res) => {
     console.log("Event created successfully:", newEvent.toJSON());
     return res.status(201).json(newEvent);
   } catch (error) {
-    console.error("Error creating event:", error);
-    return res.status(500).send("Server error");
+    
+    next(new Custom500Error(error.message));
   }
 };
 

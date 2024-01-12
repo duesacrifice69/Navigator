@@ -1,7 +1,8 @@
 const Leaves = require("../models/Leaves");
+const { Custom500Error } = require("../middleware/errorHandlingMiddleware");
 
 const leavesController = {
-  addLeaves: async (req, res) => {
+  addLeaves: async (req, res, next) => {
     try {
       const { LeaveType, Total, employeeNumber } = req.body;
 
@@ -18,13 +19,13 @@ const leavesController = {
       });
 
       res.status(201).json({ data: newLeaves });
-    } catch (err) {
-      console.log(err);
-      res.status(500).send("Internal server error");
+    } catch (error) {
+      
+      next(new Custom500Error(error.message));
     }
   },
 
-  getLeaves: async (req, res) => {
+  getLeaves: async (req, res, next) => {
     try {
       const employeeNumber = req.employeeNumber;
       const LeavesRecords = await Leaves.findAll({
@@ -34,8 +35,8 @@ const leavesController = {
 
       res.json({ data: LeavesRecords });
     } catch (error) {
-      console.log(err);
-      res.status(500).send("Internal server error");
+      
+      next(new Custom500Error(error.message));
     }
   },
 };

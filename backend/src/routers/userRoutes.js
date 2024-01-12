@@ -1,101 +1,180 @@
 const { Router } = require("express");
 const router = Router();
-const {
-  login,
-  logout,
-  forgotPassword,
-  resetPassword,
-  submitVerficationCode,
-} = require("../controllers/authController");
-const userController = require("../controllers/userController");
-const { uploadImage } = require("../middleware/uploadImage");
 const { auth } = require("../middleware/authMiddleware");
 const {
   permissionsData,
-  generateToken,
 } = require("../controllers/permissionController");
+const errorHandlingMiddleware = require("../middleware/errorHandlingMiddleware"); 
 const attendanceController = require("../controllers/attendanceController");
-const leavesController = require("../controllers/leavesController");
-const permissionController = require("../controllers/permissionController");
-const eventController = require("../controllers/eventController");
-const liabilityController = require("../controllers/laibilityController");
+const  permissionController =require("../controllers/permissionController");
+const userController =require("../controllers/userController");
+const leavesController =require("../controllers/leavesController");
+const liabilityController=require("../controllers/laibilityController");
 const financialDataContoller = require("../controllers/financialDataContoller");
-const { checkToken } = require("../middleware/auth");
-
-router.post("/register", uploadImage, (req, res) => {
-  userController.registerUser(req, res);
-});
-
-router.post("/login", login, (req, res) => {
-  res.json({ message: "Login successful" });
-});
-
-router.post("/logout", logout, (req, res) => {
-  res.json({ message: "Logout successful" });
-});
-
-router.post("/sendVerificationCode", forgotPassword, (req, res) => {
-  res.json({ message: "forgot password successful" });
-});
-
-router.post(
-  "/submitVerificationCode",
-  
-  submitVerficationCode,
-  (req, res) => {
-    res.json({ message: "verification code verified successful" });
-  }
-);
-
-router.post("/resetPassword", resetPassword, (req, res) => {
-  res.json({ message: " resetPassword password successful" });
-});
-router.get("/auth", checkToken, async (req, res) => {
-  res.render("home");
-});
-
-router.get("/permissions/authnew", auth, async (req, res) => {
-  const permissions = permissionController.permission(
-    permissionsData[req.userRole]
-  );
-  res.send({ permissions });
-});
-router.get("/profile", auth, async (req, res) => {
-  userController.getRegisteredUserDetails(req, res);
-});
-router.get("/profile/picture", auth, async (req, res) => {
-  userController.getRegisteredUserProfilePicture(req, res);
-});
-
-router.post("/attendence-add", auth, attendanceController.addAttendance);
+const eventController =require("../controllers/eventController");
+/**
+ * @swagger
+ * /api/users/attendance:
+ *   get:
+ *     summary: Get user attendance
+ *     description: Retrieve attendance data for a user
+ *     tags:
+ *       - Attendance
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 
+ *
+ *       // Add more responses as needed
+ */
 router.get("/attendance", auth, attendanceController.getAttendance);
 
-// router.post("/leaves-add", async (req, res) => {
-//   leavesController.addLeaves(req, res);
-// });
-
+/**
+ * @swagger
+ * /api/users/leaves:
+ *   get:
+ *     summary: Get user leaves
+ *     description: Retrieve leaves data for a user
+ *     tags:
+ *       - Leaves
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 // Define your response properties here
+ *       // Add more responses as needed
+ */
 router.get("/leaves", auth, async (req, res) => {
   leavesController.getLeaves(req, res);
 });
 
+/**
+ * @swagger
+ * /api/users/events:
+ *   get:
+ *     summary: Get all events
+ *     description: Retrieve all events
+ *     tags:
+ *       - Events
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 // Define your response properties here
+ *       // Add more responses as needed
+ */
 router.get("/events", async (req, res) => {
   eventController.getAllEvents(req, res);
 });
+
+/**
+ * @swagger
+ * /api/users/events-create:
+ *   post:
+ *     summary: Create a new event
+ *     description: Create a new event
+ *     tags:
+ *       - Events
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *             id:
+ *           type: integer
+ *           description: The Auto-generated id of a post
+ *         employeeNumber:
+ *           type: integer
+ *           description: employeeNumber
+ *         Date:
+ *           type: string
+ *           description: title of post
+ *       example:
+ *         id: 1
+ *         EmployeeNumber: 800000
+ *         title: 23/12/2024
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *       // Add more responses as needed
+ */
 router.post("/events-create", async (req, res) => {
   eventController.createEvent(req, res);
 });
 
+/**
+ * @swagger
+ * /api/users/liabilities:
+ *   get:
+ *     summary: Get user liabilities
+ *     description: Retrieve liabilities data for a user
+ *     tags:
+ *       - Liabilities
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 // Define your response properties here
+ *       // Add more responses as needed
+ */
 router.get("/liabilities", auth, async (req, res) => {
   liabilityController.getLiabilities(req, res);
 });
-router.get("/Earning", auth, async (req, res) => {
-  financialDataContoller.getFinanceData(req, res);
-});
-router.get("/deduction", auth, async (req, res) => {
-  financialDataContoller.getFinanceData(req, res);
-});
+
+/**
+ * @swagger
+ * /api/users/budget:
+ *   get:
+ *     summary: Get user budget information
+ *     description: Retrieve budget information for a user
+ *     tags:
+ *       - Budget
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 // Define your response properties here
+ *       // Add more responses as needed
+ */
 router.get("/budget", auth, async (req, res) => {
   financialDataContoller.getFinanceData(req, res);
 });
 
+// Add more routes as needed...
+
+// Error handling middleware
+router.use(errorHandlingMiddleware.errorHandlingMiddleware);
+
 module.exports = router;
+

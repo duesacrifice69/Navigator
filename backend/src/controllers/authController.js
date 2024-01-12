@@ -3,10 +3,16 @@ const User = require("../models/User");
 const { generateTokens } = require("../tokenUtils");
 const nodemailer = require("nodemailer");
 const PasswordHistory = require("../models/Password");
+//const io = socketRoutes(server);
+const {
+  Custom400Error,
+  Custom401Error,
+  Custom500Error,
+} = require("../middleware/errorHandlingMiddleware"); 
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   const { username, password } = req.body;
-
+  //io.emit("userLoggedIn", { userId: req.user.id });
   try {
     const condition = /^\d+$/.test(username)
       ? { employeeNumber: username }
@@ -17,16 +23,13 @@ const login = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(401).json({
-        message: "Login not successful",
-        error: "Invalid username or password",
-      });
+      throw new Custom401Error("Invalid username or password");
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid username or password" });
+      throw new Custom401Error("Invalid username or password");
     }
 
     const { accessToken } = generateTokens(user);
@@ -40,33 +43,28 @@ const login = async (req, res) => {
 
     res.status(200).json({ accessToken });
   } catch (error) {
-    console.error("An error occurred:", error);
-
-    res.status(500).json({
-      message: "An error occurred",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const logout = async (req, res) => {
+const logout = async (req, res, next) => {
+  io.emit("userLoggedOut", { userId: req.user.id });
   try {
     res.clearCookie("jwt");
-
     res.status(200).json({ message: "Logout successful" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    
+    next(new Custom500Error("Internal server error"));
   }
 };
-async function forgotPassword(req, res) {
-   
+async function forgotPassword(req, res, next) {
   const { employeeNumber } = req.body;
+
   try {
-    
     const user = await User.findOne({ where: { employeeNumber } });
+
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      throw new Custom400Error("User not found");
     }
 
     const transporter = nodemailer.createTransport({
@@ -82,27 +80,22 @@ async function forgotPassword(req, res) {
     });
 
     const sendVerificationCode = async (email, code) => {
-      try {
-        const mailOptions = {
-          from: "dinukanisheda9@gmail.com",
-          to: email,
-          subject: "**Verification Code**",
-          html: `
-        <div style="background-color: #1B4242; color: #ffffff; padding: 10px; border-radius: 5px;">
-          <p style="font-weight: bold;">Your verification code is:</p>
-          <p style="font-weight: bold; font-size: 16px; color: #ffffff;">${code}</p>
-        </div>
-      `,
-        };
+      const mailOptions = {
+        from: "dinukanisheda9@gmail.com",
+        to: email,
+        subject: "**Verification Code**",
+        html: `
+          <div style="background-color: #1B4242; color: #ffffff; padding: 10px; border-radius: 5px;">
+            <p style="font-weight: bold;">Your verification code is:</p>
+            <p style="font-weight: bold; font-size: 16px; color: #ffffff;">${code}</p>
+          </div>
+        `,
+      };
 
-        const info = await transporter.sendMail(mailOptions);
+      const info = await transporter.sendMail(mailOptions);
 
-        console.log("Email sent: " + info.response);
-        return true;
-      } catch (error) {
-        console.error("Error sending email:", error);
-        return false;
-      }
+      console.log("Email sent: " + info.response);
+      return true;
     };
 
     const emailFirstLetter = user.email.split("@")[0].slice(0, 1);
@@ -126,22 +119,21 @@ async function forgotPassword(req, res) {
           res.json({ data: { email: hiddenEmail } });
         } else {
           console.log("Failed to send verification code.");
-          res
-            .status(500)
-            .json({ message: "Failed to send verification code." });
+          throw new Custom500Error("Failed to send verification code.");
         }
       })
       .catch((error) => {
         console.error("Error:", error);
-        res.status(500).json({ message: "Internal server error" });
+        throw new Custom500Error("Internal server error");
       });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    // Pass the error to the error handling middleware
+    errorHandlingMiddleware(error, req, res, next);
   }
 }
 
-async function submitVerficationCode(req, res) {
+
+async function submitVerificationCode(req, res) {
   const { employeeNumber, verificationCode } = req.body;
 
   try {
@@ -151,16 +143,14 @@ async function submitVerficationCode(req, res) {
     });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      throw new Custom404Error("User not found");
     }
 
     if (
-      user.verificationCode != verificationCode ||
+      user.verificationCode !== verificationCode ||
       user.verificationCodeExpiration.getTime() < new Date().getTime()
     ) {
-      return res
-        .status(401)
-        .json({ message: "Invalid or expired verification code" });
+      throw new Custom401Error("Invalid or expired verification code");
     }
 
     user.verificationCode = null;
@@ -169,12 +159,13 @@ async function submitVerficationCode(req, res) {
 
     res.json({ message: "Verification code verified" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    // Pass the error to the error handling middleware for handling
+    next(error);
   }
 }
 
-async function resetPassword(req, res) {
+
+async function resetPassword(req, res,next) {
   const { employeeNumber, password } = req.body;
 
   try {
@@ -184,10 +175,10 @@ async function resetPassword(req, res) {
     });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      throw new Custom404Error("User not found");
     }
 
-    const hashedPassword = await bcrypt.hash(password,10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const passwordHistory = user.PasswordHistories.map(
       (pHistory) => pHistory.dataValues.password
@@ -196,10 +187,11 @@ async function resetPassword(req, res) {
     const isPasswordUsedBefore = passwordHistory.some((oldPassword) =>
       bcrypt.compareSync(password, oldPassword)
     );
+
     if (isPasswordUsedBefore) {
-      return res
-        .status(401)
-        .json({ message: "New password cannot be one of the last passwords." });
+      throw new Custom401Error(
+        "New password cannot be one of the last passwords."
+      );
     }
 
     user.password = hashedPassword;
@@ -208,8 +200,8 @@ async function resetPassword(req, res) {
 
     res.json({ message: "Password reset successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    
+    next(error);
   }
 }
 
@@ -233,7 +225,7 @@ module.exports = {
   login,
   logout,
   forgotPassword,
-  submitVerficationCode,
   resetPassword,
   deleteUserByEmployeeNumber,
+  submitVerificationCode,
 };
